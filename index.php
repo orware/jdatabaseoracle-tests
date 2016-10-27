@@ -233,8 +233,6 @@ else
 	<?php $oracle = JDatabase::getInstance($options2); ?>
 	<?php
 
-		//$oracle->setQuery('SELECT * FROM SPRIDEN WHERE SPRIDEN_PIDM = 361765');
-
 		// Test #1: Basic Query:
 		$oracle->setQuery('SELECT * FROM COUNTRIES');
 		$rows = $oracle->loadObjectList();

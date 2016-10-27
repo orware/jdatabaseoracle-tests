@@ -1,6 +1,14 @@
 # jdatabaseoracle-tests
 A collection of tests that can be run against the HR schema built-in to the free Oracle Express Edition 11g
 
+### Joomla Testing
+
+The index.php file here is meant to be used as a temporary replacement for the templates/protostar index.php file that way you can simply open up your Joomla site and see the results collected at the bottom of your screen.
+
+You can switch between the PDO and OCI8 versions within the index.php file on line 233.
+
+NOTE: That OCI8 is probably only supported on PHP 7 and higher, but if you still have PHP 5.6 you can try out both more easily.
+
 ### Before you get started
 
 I'm assuming that you have the Oracle Instant Client (32-bit version, since XAMPP won't work with the 64-bit one currently):
@@ -44,7 +52,3 @@ In SQL Developer, after unlocking the HR schema I added it in as a connection us
 * SID: xe
 
 Once connected to the HR schema you can expand the Tables area on the left-hand side to see the tables that come included. You can right-click on this Tables section to refresh the list manually (which might be needed during these tests when tables get created).
-
-### Joomla Testing
-
-The index file here is meant to be used as a temporary replacement for the templates/protostar index.php file that way you can simply open up your Joomla site and see the results collected at the bottom of your screen.
