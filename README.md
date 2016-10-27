@@ -3,7 +3,7 @@ A collection of tests that can be run against the HR schema built-in to the free
 
 ### Joomla Testing
 
-The index.php file here is meant to be used as a temporary replacement for the templates/protostar index.php file that way you can simply open up your Joomla site and see the results collected at the bottom of your screen.
+The index.php file here is meant to be used as a temporary replacement for the templates/protostar index.php file that way you can simply open up a test Joomla site and see the results collected at the bottom of your screen.
 
 You can switch between the PDO and OCI8 versions within the index.php file on line 233.
 
