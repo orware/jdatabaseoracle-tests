@@ -229,8 +229,10 @@ else
 		'host' => 'localhost',
 		'driver' => 'oracle',
 	];
+	
+	$options = $options2;
 	?>
-	<?php $oracle = JDatabase::getInstance($options2); ?>
+	<?php $oracle = JDatabase::getInstance($options); ?>
 	<?php
 
 		// Test #1: Basic Query:
@@ -682,13 +684,84 @@ else
 		{
 			$rows[] = $row;
 		}
-		//unset($iterator);
 
 		echo "<pre>";
 		echo "Test #36: getIterator() Result Set Uppercase Test:\n";
 		echo print_r($rows, true);
 		echo "</pre>";
 		$oracle->toLower();
+
+		// Hidden Test: DROP REGIONS4 Table:
+		$oracle->dropTable('regions4');
+		$rows = $oracle->getAffectedRows();
+
+		// Test #36: Create another copy of the Regions Table:
+		$rows = $oracle->copyTable('regions', 'regions4');
+
+		$rows = $oracle->getAffectedRows();
+
+		echo "<pre>";
+		echo "Test #36: Create another copy of the Regions Table (REGIONS4):\n";
+		echo print_r($rows, true);
+		echo "</pre>";
+
+		// Test #37: LOCK REGIONS4 table (should prevent INSERTs):
+		$oracle->lockTable('regions4');
+		$rows = $oracle->getAffectedRows();
+
+		echo "<pre>";
+		echo "Test #37: LOCK REGIONS4 table (should prevent INSERTs):\n";
+		echo print_r($rows, true);
+		echo "</pre>";
+
+		// Test #38: UNLOCK REGIONS4 table:
+		$oracle->unlockTables();
+		$rows = $oracle->getAffectedRows();
+
+		echo "<pre>";
+		echo "Test #38: UNLOCK REGIONS4 table:\n";
+		echo print_r($rows, true);
+		echo "</pre>";
+
+		// Hidden Test: Create Additional Connection as the SYS user
+		// NOTE: Assumes that it also has the same 1234 password as the HR schema.
+		$options['user'] = 'SYSTEM';
+		$oracle2 = JDatabase::getInstance($options);
+
+		// Hidden Test: Delete the HR2 USER Schema (equivalent to a database in Oracle) so it can recreated.
+		$oracle2->dropDatabase('hr2');
+
+		// Test #39: CREATE USER (which is more or less equivalent to creating an additional database in MySQL) Query Test:
+		$obj = new stdClass();
+		$obj->db_name = 'hr2';
+		$obj->db_user = 'hr';
+		$obj->db_password = '1234';
+		$oracle2->createDatabase($obj, true);
+
+		$rows = $oracle2->getAffectedRows();
+
+		echo "<pre>";
+		echo "Test #39: CREATE USER (which is more or less equivalent to creating an additional database in MySQL) Query Test:\n";
+		echo print_r($rows, true);
+		echo "</pre>";
+
+		// Test #40: Show HR2 User/Database Now Exists:
+		$oracle2->setQuery("SELECT USERNAME, DEFAULT_TABLESPACE
+							FROM DBA_USERS
+							WHERE USERNAME = 'HR2'");
+		$rows = $oracle2->loadObjectList();
+
+		echo "<pre>";
+		echo "Test #40: Show HR2 User/Database Now Exists:\n";
+		echo print_r($rows, true);
+		echo "</pre>";
+
+		// Hidden Test: Copy data over to new schema using SYSTEM account:
+		$oracle2->copyTable('hr.employees', 'hr2.employees', true);
+
+		// In my local testing the above successfully worked for me and the new HR2
+		// schema then contained a copy of the EMPLOYEES table from the HR schema.
+
 	?>
 </body>
 </html>
