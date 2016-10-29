@@ -433,7 +433,7 @@ else
 		//unset($iterator);
 
 		echo "<pre>";
-		echo "Test #20: getIterator() Result Set::\n";
+		echo "Test #20: getIterator() Result Set:\n";
 		echo print_r($rows, true);
 		echo "</pre>";
 
@@ -672,6 +672,23 @@ else
 		echo "Test #35: loadRowList with Key Provided:\n";
 		echo print_r($rows, true);
 		echo "</pre>";
+
+		// Test #36: getIterator() Result Set Uppercase Test:
+		$oracle->setQuery('SELECT * FROM REGIONS');
+		$rows = array();
+		$oracle->toUpper();
+		$iterator = $oracle->getIterator();
+		foreach($iterator as $row)
+		{
+			$rows[] = $row;
+		}
+		//unset($iterator);
+
+		echo "<pre>";
+		echo "Test #36: getIterator() Result Set Uppercase Test:\n";
+		echo print_r($rows, true);
+		echo "</pre>";
+		$oracle->toLower();
 	?>
 </body>
 </html>
